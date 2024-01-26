@@ -1,8 +1,8 @@
-[server]
-port = 8080
+#[server]
+#port = 8080
 
 [theme]
 base="dark"
 
-[client]
-showErrorDetails = false
+#[client]
+#showErrorDetails = false
