@@ -146,35 +146,63 @@ with tab1:
     )
 
 with tab2:    
-    df_serie = data[['EMPRESA', 'TEMPO', 'TOTAL_PALAVRAS']].set_index(['EMPRESA', 'TEMPO']).groupby(['EMPRESA', 'TEMPO'])['TOTAL_PALAVRAS'].count().reset_index()
-
-    fig_hapvida = px.line(df_serie,
+    df_serie1 = data[['EMPRESA', 'TEMPO', 'TOTAL_PALAVRAS']].set_index(['EMPRESA', 'TEMPO']).groupby(['EMPRESA', 'TEMPO'])['TOTAL_PALAVRAS'].count().reset_index()
+    fig1 = px.line(df_serie1,
                             x = 'TEMPO',
                             y = 'TOTAL_PALAVRAS',
                             line_group = 'EMPRESA',
                             markers=True,
-                            range_y=(0, df_serie.max()),
+                            range_y=(0, df_serie1.max()),
                             color = 'EMPRESA',
                             title= 'Série temporal do número de reclamações'
                     ).update_layout(
                        xaxis_title="Tempo", yaxis_title="Total"
                     )                            
+    st.plotly_chart(fig1, use_container_width=True)    
 
-    # st.metric('Total de Palavras', df_serie.shape[0])
-    st.plotly_chart(fig_hapvida, use_container_width=True)    
-
-    df_serie = data[['EMPRESA', 'TEMPO', 'TOTAL_PALAVRAS']].set_index(['EMPRESA', 'TEMPO']).groupby(['EMPRESA', 'TEMPO'])['TOTAL_PALAVRAS'].sum().reset_index()
-    fig_hapvida = px.line(df_serie,
+    df_serie2 = data[['EMPRESA', 'TEMPO', 'TOTAL_PALAVRAS']].set_index(['EMPRESA', 'TEMPO']).groupby(['EMPRESA', 'TEMPO'])['TOTAL_PALAVRAS'].sum().reset_index()
+    fig2 = px.line(df_serie2,
                             x = 'TEMPO',
                             y = 'TOTAL_PALAVRAS',
                             line_group = 'EMPRESA',
                             markers=True,
-                            range_y=(0, df_serie.max()),
+                            range_y=(0, df_serie2.max()),
                             color = 'EMPRESA',
                             title= 'Distribuição do tamanho do texto'
                     ).update_layout(
                        xaxis_title="Tempo", yaxis_title="Total"
                     )
+    st.plotly_chart(fig2, use_container_width=True)    
 
-    st.plotly_chart(fig_hapvida, use_container_width=True)    
+
+    fig, ax = plt.subplots(figsize=(16,9))
+    df_estado = data[['EMPRESA', 'ESTADO', 'TOTAL_PALAVRAS']].sort_values(by = ['ESTADO']).groupby(['ESTADO', 'EMPRESA'])['TOTAL_PALAVRAS'].count().reset_index()
+
+    sns.lineplot(data=df_estado, x='ESTADO', y='TOTAL_PALAVRAS', hue='EMPRESA')
+    # plt.tick_params(top='off', bottom='off', left='off', right='off')
+    plt.yticks(color='white')
+    plt.xticks(rotation=75, color='white')
+    # ax.set(xlabel='Estado', ylabel='Reclamações')
+    ax.set_xlabel('Estado', color='white')
+    ax.set_ylabel('Reclamações', color='white')
+    # plt.grid()
+    ax.yaxis.grid()
+    ax.set(frame_on=False) 
+    for item in [fig, ax]:
+        item.patch.set_visible(False) 
+    st.pyplot(ax.figure)
+
+    # df_serie3 = data[['EMPRESA', 'TEMPO', 'STATUS']].set_index(['EMPRESA', 'TEMPO']).groupby(['EMPRESA', 'TEMPO'])#['STATUS'].agg(['count']).reset_index()
+    # fig3 = px.line(df_serie3,
+    #                         x = 'TEMPO',
+    #                         y = 'STATUS',
+    #                         line_group = 'EMPRESA',
+    #                         markers=True,
+    #                         range_y=(0, df_serie3.max()),
+    #                         color = 'EMPRESA',
+    #                         title= 'Frequência de cada tipo de STATUS'
+    #                 ).update_layout(
+    #                    xaxis_title="Tempo", yaxis_title="Total"
+    #                 )
+    # st.plotly_chart(fig3, use_container_width=True)    
    
