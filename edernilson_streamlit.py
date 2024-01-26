@@ -123,20 +123,20 @@ with col3:
         info_total_experimentos = len(data[data['EMPRESA'] == 'NAGEM'])
         st.metric('NAGEM', info_total_experimentos)        
 
-# st.session_state.columns
+# Filtro selecao de colunas
 columns_selected = []
 for col in columns:
     if st.session_state[col]:
         columns_selected.append(col)
 if len(columns_selected) == 0:
     columns_selected = columns        
-data = data[columns_selected]
+dataGrid = data[columns_selected]
 
-tab1, tab2, tab3 = st.tabs(["Dados", "Gráficos", "Mapa"])
+tab1, tab2 = st.tabs(["Dados", "Gráficos"])
 
 with tab1:
-    st.write("### Tabela de Dados do Reclame Aqui", data.sort_index())
-    csv = convert_df(df)
+    st.write("### Tabela de Dados do Reclame Aqui", dataGrid.sort_index())
+    csv = convert_df(dataGrid)
     st.download_button(
         "Download da Tabela no formato CSV",
         csv,
@@ -191,18 +191,5 @@ with tab2:
     for item in [fig, ax]:
         item.patch.set_visible(False) 
     st.pyplot(ax.figure)
-
-    # df_serie3 = data[['EMPRESA', 'TEMPO', 'STATUS']].set_index(['EMPRESA', 'TEMPO']).groupby(['EMPRESA', 'TEMPO'])#['STATUS'].agg(['count']).reset_index()
-    # fig3 = px.line(df_serie3,
-    #                         x = 'TEMPO',
-    #                         y = 'STATUS',
-    #                         line_group = 'EMPRESA',
-    #                         markers=True,
-    #                         range_y=(0, df_serie3.max()),
-    #                         color = 'EMPRESA',
-    #                         title= 'Frequência de cada tipo de STATUS'
-    #                 ).update_layout(
-    #                    xaxis_title="Tempo", yaxis_title="Total"
-    #                 )
-    # st.plotly_chart(fig3, use_container_width=True)    
+ 
    
